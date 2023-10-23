@@ -12,8 +12,8 @@ setup(
     package_dir={'': '.'},
     entry_points={
         'console_scripts': [
-            'is-aruco-calib-intrinsic=is_aruco_calib.calibrate_intrinsic:main',
-            'is-aruco-calib-extrinsic=is_aruco_calib.calibrate_extrinsic:main',
+            'is-aruco-calib-intrinsic=is_aruco_calib.calibrate.intrinsic:main',
+            'is-aruco-calib-extrinsic=is_aruco_calib.calibrate.extrinsic:main',
         ],
     },
     zip_safe=False,
@@ -21,7 +21,6 @@ setup(
         "is-msgs==1.1.18",
         "is-wire==1.2.1",
         "numpy==1.24.4",
-        "nptyping==2.5.0",
         "opencv-contrib-python==4.8.0.76",
     ],
 )

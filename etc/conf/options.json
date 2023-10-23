@@ -1,0 +1,16 @@
+{
+    "camera_id": 3,
+    "world_id": 1000,
+    "uri": "amqp://10.20.5.2:30000",
+    "topic": "CameraGateway.{}.Frame",
+    "data_dir": "ufes/",
+    "save_images": true,
+    "intrinsic": {
+      "dictionary": "DICT_4X4_50",
+      "marker_length": 0.035,
+      "square_length": 0.045,
+      "n_squares_x": 9,
+      "n_squares_y": 7,
+      "samples": 100
+    }
+  }
