@@ -1,13 +1,29 @@
+from typing import Any
+
 import cv2
 import numpy as np
 import numpy.typing as npt
+from google.protobuf.json_format import Parse, ParseError
+from google.protobuf.message import Message
 from is_msgs.common_pb2 import DataType, Tensor
 from is_msgs.image_pb2 import Image
-from google.protobuf.message import Message
-from google.protobuf.json_format import Parse, ParseError
 from is_wire.core import Logger
 
-def array2tensor(array: np.ndarray) -> Tensor:
+
+def array2tensor(array: npt.NDArray[Any]) -> Tensor:
+    """
+    Convert a NumPy array to a Tensor protobuf message.
+
+    Parameters
+    ----------
+    array : npt.NDArray[Any]
+        The NumPy array to be converted to a Tensor.
+
+    Returns
+    -------
+    Tensor
+        The resulting Tensor message.
+    """
     tensor = Tensor()
     rows = tensor.shape.dims.add()
     rows.size = array.shape[0]
@@ -31,11 +47,45 @@ def array2tensor(array: np.ndarray) -> Tensor:
 
 
 def image2array(image: Image) -> npt.NDArray[np.uint8]:
+    """
+    Convert an Image protobuf message to a NumPy array.
+
+    Parameters
+    ----------
+    array : Image
+        The Image protobuf message to be converted to a NumPy array.
+
+    Returns
+    -------
+    npt.NDArray[np.uint8]
+        The NumPy array representing the image in grayscale.
+    """
     buffer = np.frombuffer(image.data, dtype=np.uint8)
     array = cv2.imdecode(buffer, flags=cv2.IMREAD_GRAYSCALE)
     return array
 
+
 def load_json(filename: str, logger: Logger, schema: Message) -> Message:
+    """
+    Load JSON data from a file and parse it into a protobuf message.
+
+    This function loads JSON data from the specified file, parses it into a protobuf message
+    based on the provided schema, and returns the resulting message.
+
+    Parameters
+    ----------
+    filename : str
+        The path to the JSON file to be loaded and parsed.
+    logger : Logger
+        An instance of the Logger for logging messages.
+    schema : Message
+        The protobuf message schema to parse the JSON data into.
+
+    Returns
+    -------
+    Message
+        The parsed protobuf message.
+    """
     try:
         with open(file=filename, mode="r", encoding="utf-8") as file:
             try:

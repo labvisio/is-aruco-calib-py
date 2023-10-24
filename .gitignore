@@ -55,3 +55,8 @@ venv.bak/
 .mypy_cache/
 .dmypy.json
 dmypy.json
+
+# project
+*.png
+etc/calibrations/*
+!.gitkeep
