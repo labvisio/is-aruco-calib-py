@@ -146,7 +146,7 @@ class Charuco:
     ) -> CameraCalibration:
         """
         Calibrates the camera using Charuco marker detections.
-        
+
         It collects data from multiple image and detection pairs and computes the camera
         intrinsic parameters and distortion coefficients. The calibration results are returned
         as a CameraCalibration object.
@@ -219,23 +219,29 @@ def board_moved(
     bool
         True if the board has moved, False otherwise.
     """
-    curr_ids = current["aruco_ids"].flatten()
-    last_ids = last["aruco_ids"].flatten()
-    for i, curr_id in enumerate(curr_ids):
-        if curr_id in last_ids:
-            (j,) = np.where(last_ids == curr_id)
-            distance = cv2.norm(
-                last["aruco_corners"][j[0]] - current["aruco_corners"][i]
-            )
-            if distance > distance_threshold:
-                return True
+    if (
+        current["aruco_ids"] is not None
+        and last["aruco_ids"] is not None
+        and current["aruco_corners"] is not None
+        and last["aruco_corners"] is not None
+    ):
+        curr_ids = current["aruco_ids"].flatten()
+        last_ids = last["aruco_ids"].flatten()
+        for i, curr_id in enumerate(curr_ids):
+            if curr_id in last_ids:
+                (j,) = np.where(last_ids == curr_id)
+                distance = cv2.norm(
+                    last["aruco_corners"][j[0]] - current["aruco_corners"][i]
+                )
+                if distance > distance_threshold:
+                    return True
     return False
 
 
 def draw_detection(
     image: npt.NDArray[np.uint8],
     detection: CharucoDetection,
-) -> None:
+) -> npt.NDArray[np.uint8]:
     """
     Draws detected Aruco and Charuco markers on the input image.
 
@@ -297,7 +303,7 @@ def save_images(
         cv2.imwrite("{}/{:003}.png".format(data_dir, index), image)
 
 
-def main():
+def main() -> None:
     """
     The main function for performing camera calibration using Charuco markers.
 
@@ -347,11 +353,9 @@ def main():
             image = message.unpack(Image)
             array = image2array(image=image)
             counter, detection = charuco.detect(image=array)
-            if counter < (
+            if counter > (
                 (options.intrinsic.n_squares_x * options.intrinsic.n_squares_y) / 2
             ):
-                logger.warn("Requires at least half")
-            else:
                 if len(detections) > 0:
                     if board_moved(current=detection, last=detections[-1][1]):
                         logger.info("Board moved, saved detection")
@@ -359,6 +363,9 @@ def main():
                 else:
                     logger.info("Saved first detection")
                     detections.append((array, detection))
+            else:
+                if counter != 0:
+                    logger.warn("Requires at least half corners, corners={}", counter)
             image_copy = draw_detection(image=array, detection=detection)
             image_copy = cv2.putText(
                 img=image_copy,
@@ -376,7 +383,7 @@ def main():
     else:
         logger.info("Using folder={}, and searching for *.png files", options.data_dir)
         images = cv2.VideoCapture(f"{options.data_dir}/%3d.png")
-        while images.isOpened:
+        while images.isOpened():
             ret, frame = images.read()
             if not ret:
                 logger.warn("Can't read image, skipping...")
@@ -390,21 +397,27 @@ def main():
             else:
                 logger.info("Saved first detection")
                 detections.append((gray, detection))
+    if len(detections) >= options.intrinsic.samples:
+        logger.info("Calibrating camera id={}", options.camera_id)
+        calibration = charuco.calibrate_camera(detections=detections)
+        calibration.id = options.camera_id
 
-    logger.info("Calibrating camera id={}", options.camera_id)
-    calibration = charuco.calibrate_camera(detections=detections)
-    calibration.id = options.camera_id
+        with open(
+            file=os.path.join(options.data_dir, f"{options.camera_id}.json"),
+            mode="w",
+            encoding="utf-8",
+        ) as file:
+            content = MessageToJson(calibration, indent=2)
+            file.write(content)
 
-    with open(
-        file=os.path.join(options.data_dir, f"{options.camera_id}.json"),
-        mode="w",
-        encoding="utf-8",
-    ) as file:
-        content = MessageToJson(calibration, indent=2)
-        file.write(content)
-
-    if options.save_images:
-        save_images(data_dir=options.data_dir, detections=detections)
+        if options.save_images:
+            save_images(data_dir=options.data_dir, detections=detections)
+    else:
+        logger.warn(
+            "Did not detect enough charuco boards: {}/{}",
+            len(detections),
+            options.intrinsic.samples,
+        )
 
 
 if __name__ == "__main__":
