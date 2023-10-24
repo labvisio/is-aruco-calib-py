@@ -5,7 +5,7 @@ setup(
     name='is_aruco_calib',
     version='0.0.1',
     description='',
-    url='http://github.com/labvisio/is-aruco-calib',
+    url='http://github.com/labvisio/is-aruco-calib-py',
     author='labvisio',
     license='MIT',
     packages=find_packages('.'),
@@ -14,6 +14,7 @@ setup(
         'console_scripts': [
             'is-aruco-calib-intrinsic=is_aruco_calib.calibrate.intrinsic:main',
             'is-aruco-calib-extrinsic=is_aruco_calib.calibrate.extrinsic:main',
+            'is-aruco-calib-marker=is_aruco_calib.create.marker:main',
         ],
     },
     zip_safe=False,

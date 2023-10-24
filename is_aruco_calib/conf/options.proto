@@ -23,7 +23,7 @@ message CreateArucoOptions {
   // marker id in the dictionary 
   int32 marker_id = 2 [(is.validate.rules).int32 = {gte: 0}];
   // marker length in pixels
-  float marker_length = 3 [(is.validate.rules).float = {gt: 0.0}];
+  int32 marker_length = 3 [(is.validate.rules).int32 = {gt: 0}];
   // number of bits in marker borders 
   int32 border_bits = 4 [(is.validate.rules).int32 = {gt: 0}];
 }

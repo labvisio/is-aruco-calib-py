@@ -47,8 +47,8 @@ class CreateArucoOptions(_message.Message):
     border_bits: int
     dictionary: ArucoDictionary
     marker_id: int
-    marker_length: float
-    def __init__(self, dictionary: Optional[Union[ArucoDictionary, str]] = ..., marker_id: Optional[int] = ..., marker_length: Optional[float] = ..., border_bits: Optional[int] = ...) -> None: ...
+    marker_length: int
+    def __init__(self, dictionary: Optional[Union[ArucoDictionary, str]] = ..., marker_id: Optional[int] = ..., marker_length: Optional[int] = ..., border_bits: Optional[int] = ...) -> None: ...
 
 class CreateCharucoOptions(_message.Message):
     __slots__ = ["border_bits", "dictionary", "marker_length", "n_squares_x", "n_squares_y", "square_length"]
