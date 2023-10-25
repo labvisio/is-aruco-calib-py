@@ -4,7 +4,7 @@ Calibrating a camera using visual markers is a fundamental process in computer v
 
 ## *ChArUco*
 
-ArUco markers were improved by interspersing them inside a checkerboard called ChArUco. Checkerboard corner intersections provide more stable corners because the edge location bias on one square is countered by the opposite edge orientation in the connecting square. By interspersing ArUco markers inside the checkerboard, each checkerboard corner gets a label which enables it to be used in complex calibration or pose scenarios where you cannot see all the corners of the checkerboard. [OpenCV's Tutorial abot Charuco]
+ArUco markers were improved by interspersing them inside a checkerboard called ChArUco. Checkerboard corner intersections provide more stable corners because the edge location bias on one square is countered by the opposite edge orientation in the connecting square. By interspersing ArUco markers inside the checkerboard, each checkerboard corner gets a label which enables it to be used in complex calibration or pose scenarios where you cannot see all the corners of the checkerboard. [OpenCV's Tutorial about Charuco]
 
 ![image](https://github.com/opencv/opencv_contrib/raw/master/modules/aruco/tutorials/charuco_detection/images/charucodefinition.png)
 
@@ -47,7 +47,7 @@ Now that you are in a virtual environment, install the project's dependencies us
 pip3 install .
 ```
 
-After completing these steps, you will have a Python virtual environment set up with the project's dependencies installed. You can run the project's code within this virtual environment, and it will not affect your global Python environment. Remember to activate the virtual environment whenever you work on this project using the source .venv/bin/activate command and deactivate it when you're done by running deactivate.
+After completing these steps, you will have a Python virtual environment set up with the project's dependencies installed. You can run the project's code within this virtual environment, and it will not affect your global Python environment. Remember to activate the virtual environment whenever you work on this project using the `source .venv/bin/activate` command and `deactivate` it when you're done by running deactivate.
 
 
 ### Creating board and markers
@@ -66,11 +66,19 @@ The script **is-aruco-calib-intrinsic** computes the intrinsic and distortion pa
 is-aruco-calib-intrinsic ./etc/conf/calibrate-aruco.json
 ```
 
+When you run the program, the following screen will appear. Please note that in the top corner of the image, you'll see the amount of images captured for calibration. n. The script automatically identifies when the CharUco board moves and only accepts detection if at least half of the corners are detected. So, when to number of detections reach the desired amount, the calibration is done and saved.
+
+![image](etc/images/intrinsinc-screenshot.png)
+
 The script **is-aruco-calib-extrinsic** computes the extrinsic parameters, that is, the transformation that can change poses from the camera frame to the world frame and vice-versa. The world frame of reference will coincide with the one of the aruco marker. The transformation is added to the respective [CameraCalibration] json file. Usage example, run the python script passing the desired configuration file:
 
 ```shell
 is-aruco-calib-extrinsic ./etc/conf/calibrate-aruco.json
 ```
+
+When you launch the program, the following screen will appear. The ArUco Pose is calculated with respect to the marker center. The configuration file allows you to translate the point to a marker corner, making it easier to place it at a specific location in the world. Therefore, make sure to configure the parameters `options.extrinsic.offset_x` and `options.extrinsic.offset_y`` correctly. To exit without saving, simply press the **q** key. To exit and save your changes, press the **k** key.
+
+![image](etc/images/extrinsic-screenshot.png)
 
 The behavior of the script can be customized by passing a JSON configuration file as the first argument, e.g: `is-aruco-calib-intrinsic options.json` or `is-aruco-calib-extrinsic options.json`. The schema for this configuration file can be found in [is_aruco_calib/conf/options.proto]. Example of configuration files to calibrate using a charuco board can be found at [etc/conf/calibrate-charuco.json].
 
@@ -83,4 +91,4 @@ The behavior of the script can be customized by passing a JSON configuration fil
 
 <!-- Links -->
 [CameraCalibration]: https://github.com/labvisio/is-msgs/tree/master/docs#is.vision.CameraCalibration
-[OpenCV's Tutorial abot Charuco]: https://github.com/opencv/opencv_contrib/blob/master/modules/aruco/tutorials/charuco_detection/charuco_detection.markdown
+[OpenCV's Tutorial about Charuco]: https://github.com/opencv/opencv_contrib/blob/master/modules/aruco/tutorials/charuco_detection/charuco_detection.markdown
