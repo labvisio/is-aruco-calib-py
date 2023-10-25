@@ -72,9 +72,9 @@ message ExtrinsicCalibrationOptions {
   int32 marker_id = 2 [(is.validate.rules).int32 = {gte: 0}];
   // marker length in meters
   float marker_length = 3 [(is.validate.rules).float = {gt: 0.0}];
-  // ArUco Pose is measured in relation to the marker center. This allow the point to be translated 
-  // to a corner of the marker to be easier to place it in a desired point in the world.
+  // offset in the X direction in relation to the marker center.
   float offset_x = 4;
+  // offset in the Y direction in relation to the marker center.
   float offset_y = 5;
 }
 
@@ -89,9 +89,9 @@ message CalibrationOptions {
   int64 camera_id = 4;
   // world frame id
   int64 world_id = 5;
-  //
+  // intrinsic calibration options
   IntrinsicCalibrationOptions intrinsic = 6;
-  //
+  // extrinsic calibration options
   ExtrinsicCalibrationOptions extrinsic = 7;
   // save images used during calibration if true
   bool save_images = 8;
