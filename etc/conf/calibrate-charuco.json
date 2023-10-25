@@ -3,7 +3,7 @@
     "world_id": 1000,
     "uri": "amqp://10.20.5.2:30000",
     "topic": "CameraGateway.{}.Frame",
-    "data_dir": "etc/calibrations/ufes/",
+    "data_dir": "etc/calibrations/ifes/",
     "save_images": true,
     "intrinsic": {
       "dictionary": "DICT_4X4_50",
