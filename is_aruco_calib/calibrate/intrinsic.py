@@ -401,7 +401,7 @@ def main() -> None:
         logger.info("Calibrating camera id={}", options.camera_id)
         calibration = charuco.calibrate_camera(detections=detections)
         calibration.id = options.camera_id
-
+        os.makedirs(options.data_dir)
         with open(
             file=os.path.join(options.data_dir, f"{options.camera_id}.json"),
             mode="w",
