@@ -15,8 +15,9 @@
     },
     "extrinsic": {
       "dictionary": "DICT_4X4_50",
-      "marker_id": 0,
+      "marker_id": 7,
       "marker_length": 0.660,
-      "offset": -0.400
+      "offset_x": -0.400,
+      "offset_y": -0.400
     }
   }

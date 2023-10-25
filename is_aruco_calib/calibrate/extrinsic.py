@@ -3,16 +3,64 @@ import sys
 
 import cv2
 import numpy as np
-
+import numpy.typing as npt
 from google.protobuf.json_format import MessageToJson
-from is_wire.core import Logger, Channel, Subscription
 from is_msgs.camera_pb2 import CameraCalibration
 from is_msgs.image_pb2 import Image
+from is_wire.core import Channel, Logger, Subscription
 
-from is_aruco_calib.utils import load_json, tensor2array, image2array, array2tensor
 from is_aruco_calib.conf.options_pb2 import CalibrationOptions
+from is_aruco_calib.utils import (
+    array2tensor,
+    image2array,
+    load_json,
+    tensor2array,
+)
+
+
+def transformation_matrix(
+    rvec: npt.NDArray[np.float32],
+    tvec: npt.NDArray[np.float32],
+) -> npt.NDArray[np.float32]:
+    """
+    Compute a transformation matrix from a rotation vector (rvec) and a translation vector
+    (tvec).
+
+    Parameters
+    ----------
+    rvec : npt.NDArray[np.float32]
+        Rotation vector (3x1) representing rotation.
+
+    tvec : npt.NDArray[np.float32]
+        Translation vector (3x1) representing translation.
+
+    Returns
+    -------
+    npt.NDArray[np.float32]
+        A 4x4 transformation matrix representing both rotation and translation.
+    """
+    rmat, _ = cv2.Rodrigues(rvec)
+    tvec = tvec.reshape(3, 1)
+    mat = np.hstack((rmat, tvec))
+    mat = np.vstack((mat, np.array([[0, 0, 0, 1]])))
+    return mat
+
 
 def main() -> None:
+    """
+    The main function for performing extrinsic camera calibration using Aruco markers.
+
+    Reads intrinsic calibration options, captures images, detects markers, and calculates
+    extrinsic transformation.
+
+    Parameters
+    ----------
+    None (program arguments are passed via the command line or from the default options file).
+
+    Returns
+    -------
+    None
+    """
     logger = Logger("ExtrinsicCalibration")
     filename = sys.argv[1] if len(sys.argv) > 1 else "options.json"
     options = load_json(
@@ -41,12 +89,12 @@ def main() -> None:
         array = image2array(image=image)
         corners, ids, _ = detector.detectMarkers(image=array)
         rvecs, tvecs, _ = cv2.aruco.estimatePoseSingleMarkers(
-            corners,
-            options.extrinsic.marker_length,
-            intrinsic,
-            distortion,
+            corners=corners,
+            markerLength=options.extrinsic.marker_length,
+            cameraMatrix=intrinsic,
+            distCoeffs=distortion,
         )
-        image_copy = cv2.cvtColor(array, cv2.COLOR_GRAY2BGR)
+        image_copy = cv2.cvtColor(src=array, code=cv2.COLOR_GRAY2BGR)
         image_copy = cv2.aruco.drawDetectedMarkers(
             image=image_copy.copy(),
             corners=corners,
@@ -82,29 +130,42 @@ def main() -> None:
         cv2.imshow("Extrinsic", image_copy)
         key = cv2.waitKey(1)
         if key == ord("q"):
-            return 0
+            logger.warn("Exiting without saving any extrinsic calibration.")
+            return
         if key == ord("k") and detected_marker:
+            logger.info("Exiting and saving calibration.")
             break
-    rmat, _ = cv2.Rodrigues(rotation)
-    tvec = translation.reshape(3, 1)
-    mat = np.hstack((rmat, tvec))
-    mat = np.vstack((mat, np.array([[0, 0, 0, 1]])))
+
+    extrinsic = transformation_matrix(
+        rvec=rotation,
+        tvec=translation,
+    )
 
     offset_translation = np.eye(4, 4)
-    offset_translation[0, 3] = options.extrinsic.offset
-    offset_translation[1, 3] = options.extrinsic.offset
+    offset_translation[0, 3] = options.extrinsic.offset_x
+    offset_translation[1, 3] = options.extrinsic.offset_y
+    extrinsic = np.dot(extrinsic, offset_translation)
+    tensor = array2tensor(array=extrinsic)
 
-    mat = np.dot(mat, offset_translation)
+    already_exists = False
+    for tf in calibration.extrinsic:
+        if (
+            getattr(tf, "from") == options.world_id
+            and getattr(tf, "to") == options.camera_id
+        ):
+            logger.warn("Calibration already exists, editing...")
+            already_exists = True
+            tf.tf.CopyFrom(tensor)
+    if not already_exists:
+        logger.info("Add new transformation to calibration file")
+        transformation = calibration.extrinsic.add()
+        transformation.tf.CopyFrom(tensor)
+        setattr(transformation, "from", options.world_id)
+        setattr(transformation, "to", options.camera_id)
 
-    transformation = calibration.extrinsic.add()
-    transformation.tf.CopyFrom(array2tensor(array=mat))
-    setattr(transformation, 'from', 100 + options.extrinsic.marker_id)
-    setattr(transformation, 'to', calibration.id)
-    with open(
-        file=os.path.join(options.data_dir, f"{options.camera_id}.json"),
-        mode="w",
-        encoding="utf-8",
-    ) as file:
+    filename = os.path.join(options.data_dir, f"{options.camera_id}.json")
+    logger.info("Writing new calibration file, file={}", filename)
+    with open(file=filename, mode="w", encoding="utf-8") as file:
         content = MessageToJson(calibration, indent=2)
         file.write(content)
 

@@ -75,16 +75,18 @@ class CreateMarker(_message.Message):
     def __init__(self, aruco: Optional[Union[CreateArucoOptions, Mapping]] = ..., charuco: Optional[Union[CreateCharucoOptions, Mapping]] = ...) -> None: ...
 
 class ExtrinsicCalibrationOptions(_message.Message):
-    __slots__ = ["dictionary", "marker_id", "marker_length", "offset"]
+    __slots__ = ["dictionary", "marker_id", "marker_length", "offset_x", "offset_y"]
     DICTIONARY_FIELD_NUMBER: ClassVar[int]
     MARKER_ID_FIELD_NUMBER: ClassVar[int]
     MARKER_LENGTH_FIELD_NUMBER: ClassVar[int]
-    OFFSET_FIELD_NUMBER: ClassVar[int]
+    OFFSET_X_FIELD_NUMBER: ClassVar[int]
+    OFFSET_Y_FIELD_NUMBER: ClassVar[int]
     dictionary: ArucoDictionary
     marker_id: int
     marker_length: float
-    offset: float
-    def __init__(self, dictionary: Optional[Union[ArucoDictionary, str]] = ..., marker_id: Optional[int] = ..., marker_length: Optional[float] = ..., offset: Optional[float] = ...) -> None: ...
+    offset_x: float
+    offset_y: float
+    def __init__(self, dictionary: Optional[Union[ArucoDictionary, str]] = ..., marker_id: Optional[int] = ..., marker_length: Optional[float] = ..., offset_x: Optional[float] = ..., offset_y: Optional[float] = ...) -> None: ...
 
 class IntrinsicCalibrationOptions(_message.Message):
     __slots__ = ["dictionary", "marker_length", "n_squares_x", "n_squares_y", "samples", "square_length"]

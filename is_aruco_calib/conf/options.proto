@@ -74,7 +74,8 @@ message ExtrinsicCalibrationOptions {
   float marker_length = 3 [(is.validate.rules).float = {gt: 0.0}];
   // ArUco Pose is measured in relation to the marker center. This allow the point to be translated 
   // to a corner of the marker to be easier to place it in a desired point in the world.
-  float offset = 4;
+  float offset_x = 4;
+  float offset_y = 5;
 }
 
 message CalibrationOptions {
