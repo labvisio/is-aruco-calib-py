@@ -60,3 +60,5 @@ dmypy.json
 *.png
 etc/calibrations/*
 !.gitkeep
+.vscode
+!etc/images/*.png
