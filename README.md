@@ -66,7 +66,7 @@ The script **is-aruco-calib-intrinsic** computes the intrinsic and distortion pa
 is-aruco-calib-intrinsic ./etc/conf/calibrate-aruco.json
 ```
 
-When you run the program, the following screen will appear. Please note that in the top corner of the image, you'll see the amount of images captured for calibration. n. The script automatically identifies when the CharUco board moves and only accepts detection if at least half of the corners are detected. So, when to number of detections reach the desired amount, the calibration is done and saved.
+When you run the program, the following screen will appear. Please note that in the top corner of the image, you'll see the amount of images captured for calibration. The script automatically identifies when the CharUco board moves and only accepts detection if at least half of the corners are detected. So, when to number of detections reach the desired amount, the calibration is done and saved.
 
 ![image](etc/images/intrinsinc-screenshot.png)
 
@@ -76,7 +76,7 @@ The script **is-aruco-calib-extrinsic** computes the extrinsic parameters, that 
 is-aruco-calib-extrinsic ./etc/conf/calibrate-aruco.json
 ```
 
-When you launch the program, the following screen will appear. The ArUco Pose is calculated with respect to the marker center. The configuration file allows you to translate the point to a marker corner, making it easier to place it at a specific location in the world. Therefore, make sure to configure the parameters `options.extrinsic.offset_x` and `options.extrinsic.offset_y`` correctly. To exit without saving, simply press the **q** key. To exit and save your changes, press the **k** key.
+When you launch the program, the following screen will appear. The ArUco Pose is calculated with respect to the marker center. The configuration file allows you to translate the point to a marker corner, making it easier to place it at a specific location in the world. Therefore, make sure to configure the parameters `options.extrinsic.offset_x` and `options.extrinsic.offset_y` correctly. To exit without saving, simply press the **q** key. To exit and save your changes, press the **k** key.
 
 ![image](etc/images/extrinsic-screenshot.png)
 
