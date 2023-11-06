@@ -30,6 +30,7 @@ class Charuco:
         n_squares_y: int,
         marker_length: float,
         square_length: float,
+        legacy_pattern: bool = False,
     ) -> None:
         """
         Initialize a Charuco calibration object with the specified parameters.
@@ -63,6 +64,7 @@ class Charuco:
             markerLength=marker_length,
             dictionary=self.aruco_dict,
         )
+        self.charuco_board.setLegacyPattern(legacy_pattern)
         self.charuco_detector = cv2.aruco.CharucoDetector(self.charuco_board)
 
     @staticmethod

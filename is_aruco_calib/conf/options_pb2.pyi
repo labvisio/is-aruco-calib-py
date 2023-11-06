@@ -51,20 +51,22 @@ class CreateArucoOptions(_message.Message):
     def __init__(self, dictionary: Optional[Union[ArucoDictionary, str]] = ..., marker_id: Optional[int] = ..., marker_length: Optional[int] = ..., border_bits: Optional[int] = ...) -> None: ...
 
 class CreateCharucoOptions(_message.Message):
-    __slots__ = ["border_bits", "dictionary", "marker_length", "n_squares_x", "n_squares_y", "square_length"]
+    __slots__ = ["border_bits", "dictionary", "legacy_pattern", "marker_length", "n_squares_x", "n_squares_y", "square_length"]
     BORDER_BITS_FIELD_NUMBER: ClassVar[int]
     DICTIONARY_FIELD_NUMBER: ClassVar[int]
+    LEGACY_PATTERN_FIELD_NUMBER: ClassVar[int]
     MARKER_LENGTH_FIELD_NUMBER: ClassVar[int]
     N_SQUARES_X_FIELD_NUMBER: ClassVar[int]
     N_SQUARES_Y_FIELD_NUMBER: ClassVar[int]
     SQUARE_LENGTH_FIELD_NUMBER: ClassVar[int]
     border_bits: int
     dictionary: ArucoDictionary
+    legacy_pattern: bool
     marker_length: float
     n_squares_x: int
     n_squares_y: int
     square_length: float
-    def __init__(self, dictionary: Optional[Union[ArucoDictionary, str]] = ..., marker_length: Optional[float] = ..., square_length: Optional[float] = ..., n_squares_x: Optional[int] = ..., n_squares_y: Optional[int] = ..., border_bits: Optional[int] = ...) -> None: ...
+    def __init__(self, dictionary: Optional[Union[ArucoDictionary, str]] = ..., legacy_pattern: bool = ..., marker_length: Optional[float] = ..., square_length: Optional[float] = ..., n_squares_x: Optional[int] = ..., n_squares_y: Optional[int] = ..., border_bits: Optional[int] = ...) -> None: ...
 
 class CreateMarker(_message.Message):
     __slots__ = ["aruco", "charuco"]
@@ -89,20 +91,22 @@ class ExtrinsicCalibrationOptions(_message.Message):
     def __init__(self, dictionary: Optional[Union[ArucoDictionary, str]] = ..., marker_id: Optional[int] = ..., marker_length: Optional[float] = ..., offset_x: Optional[float] = ..., offset_y: Optional[float] = ...) -> None: ...
 
 class IntrinsicCalibrationOptions(_message.Message):
-    __slots__ = ["dictionary", "marker_length", "n_squares_x", "n_squares_y", "samples", "square_length"]
+    __slots__ = ["dictionary", "legacy_pattern", "marker_length", "n_squares_x", "n_squares_y", "samples", "square_length"]
     DICTIONARY_FIELD_NUMBER: ClassVar[int]
+    LEGACY_PATTERN_FIELD_NUMBER: ClassVar[int]
     MARKER_LENGTH_FIELD_NUMBER: ClassVar[int]
     N_SQUARES_X_FIELD_NUMBER: ClassVar[int]
     N_SQUARES_Y_FIELD_NUMBER: ClassVar[int]
     SAMPLES_FIELD_NUMBER: ClassVar[int]
     SQUARE_LENGTH_FIELD_NUMBER: ClassVar[int]
     dictionary: ArucoDictionary
+    legacy_pattern: bool
     marker_length: float
     n_squares_x: int
     n_squares_y: int
     samples: int
     square_length: float
-    def __init__(self, dictionary: Optional[Union[ArucoDictionary, str]] = ..., marker_length: Optional[float] = ..., square_length: Optional[float] = ..., n_squares_x: Optional[int] = ..., n_squares_y: Optional[int] = ..., samples: Optional[int] = ...) -> None: ...
+    def __init__(self, dictionary: Optional[Union[ArucoDictionary, str]] = ..., legacy_pattern: bool = ..., marker_length: Optional[float] = ..., square_length: Optional[float] = ..., n_squares_x: Optional[int] = ..., n_squares_y: Optional[int] = ..., samples: Optional[int] = ...) -> None: ...
 
 class ArucoDictionary(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     __slots__ = []

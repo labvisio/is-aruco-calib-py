@@ -30,17 +30,19 @@ message CreateArucoOptions {
 
 message CreateCharucoOptions {
  // aruco dictionary
-  ArucoDictionary dictionary = 3;
+  ArucoDictionary dictionary = 1;
+  // OpenCV legacy pattern
+  bool legacy_pattern = 2;
   // marker length in pixels
-  float marker_length = 4 [(is.validate.rules).float = {gt: 0.0}];
+  float marker_length = 3 [(is.validate.rules).float = {gt: 0.0}];
   // square length in pixels
-  float square_length = 5 [(is.validate.rules).float = {gt: 0.0}];
+  float square_length = 4 [(is.validate.rules).float = {gt: 0.0}];
   // number of squares in x
-  int32 n_squares_x = 6 [(is.validate.rules).int32 = {gt: 1}];
+  int32 n_squares_x = 5 [(is.validate.rules).int32 = {gt: 1}];
   // number of squares in y
-  int32 n_squares_y = 7 [(is.validate.rules).int32 = {gt: 1}];
+  int32 n_squares_y = 6 [(is.validate.rules).int32 = {gt: 1}];
   // number of bits in marker borders 
-  int32 border_bits = 8 [(is.validate.rules).int32 = {gt: 0}];
+  int32 border_bits = 7 [(is.validate.rules).int32 = {gt: 0}];
 }
 
 message CreateMarker {
@@ -53,16 +55,18 @@ message CreateMarker {
 message IntrinsicCalibrationOptions {
   // aruco dictionary
   ArucoDictionary dictionary = 1;
+  // OpenCV legacy pattern
+  bool legacy_pattern = 2;
   // marker length in meters
-  float marker_length = 2 [(is.validate.rules).float = {gt: 0.0}];
+  float marker_length = 3 [(is.validate.rules).float = {gt: 0.0}];
   // square length in meters
-  float square_length = 3 [(is.validate.rules).float = {gt: 0.0}];
+  float square_length = 4 [(is.validate.rules).float = {gt: 0.0}];
   // number of squares in x
-  int32 n_squares_x = 4 [(is.validate.rules).int32 = {gt: 1}];
+  int32 n_squares_x = 5 [(is.validate.rules).int32 = {gt: 1}];
   // number of squares in y
-  int32 n_squares_y = 5 [(is.validate.rules).int32 = {gt: 1}];
+  int32 n_squares_y = 6 [(is.validate.rules).int32 = {gt: 1}];
   // number of images to be used in the intrinsic calibration
-  int32 samples = 6 [(is.validate.rules).int32 = {gt: 0}];
+  int32 samples = 7 [(is.validate.rules).int32 = {gt: 0}];
 }
 
 message ExtrinsicCalibrationOptions {

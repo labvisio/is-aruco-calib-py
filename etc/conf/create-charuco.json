@@ -3,8 +3,9 @@
       "dictionary": "DICT_4X4_50",
       "marker_length": 1600,
       "square_length": 2000,
-      "n_squares_x": 9,
-      "n_squares_y": 7,
-      "border_bits": 1
+      "n_squares_x": 6,
+      "n_squares_y": 4,
+      "border_bits": 1,
+      "legacy_pattern": true
     }
   }

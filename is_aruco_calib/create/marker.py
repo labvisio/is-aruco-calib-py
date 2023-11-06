@@ -43,6 +43,7 @@ def main() -> None:
             markerLength=opts.marker_length,
             dictionary=dictionary,
         )
+        board.setLegacyPattern(opts.legacy_pattern)
         image = board.generateImage(
             (width, height),
             marginSize=int(margins),
