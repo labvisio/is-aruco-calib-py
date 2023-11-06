@@ -344,6 +344,7 @@ def main() -> None:
         n_squares_y=options.intrinsic.n_squares_y,
         square_length=options.intrinsic.square_length,
         marker_length=options.intrinsic.marker_length,
+        legacy_pattern=options.intrinsic.legacy_pattern,
     )
     detections: List[Tuple[npt.NDArray[np.uint8], CharucoDetection]] = []
     if options.uri:
