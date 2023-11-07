@@ -1,0 +1,24 @@
+{
+  "camera_id": 2,
+  "world_id": 1000,
+  "uri": "amqp://10.20.5.3:30000",
+  "topic": "CameraGateway.{}.Frame",
+  "data_dir": "etc/calibrations/ufes_new/",
+  "save_images": true,
+  "intrinsic": {
+    "dictionary": "DICT_4X4_50",
+    "marker_length": 0.150,
+    "square_length": 0.190,
+    "n_squares_x": 6,
+    "n_squares_y": 4,
+    "samples": 100,
+    "legacy_pattern": true
+  },
+  "extrinsic": {
+    "dictionary": "DICT_4X4_50",
+    "marker_id": 7,
+    "marker_length": 0.40,
+    "offset_x": -0.30,
+    "offset_y": -0.30
+  }
+}

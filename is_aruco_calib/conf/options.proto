@@ -1,0 +1,102 @@
+syntax = "proto3";
+
+import "is/msgs/validate.proto";
+
+enum ArucoDictionary {
+  DICT_4X4_50 = 0;
+  DICT_4X4_100 = 1;
+  DICT_4X4_250 = 2;
+  DICT_4X4_1000 = 3;
+  DICT_5X5_50 = 4;
+  DICT_5X5_100 = 5;
+  DICT_5X5_250 = 6;
+  DICT_5X5_1000 = 7;
+  DICT_6X6_50 = 8;
+  DICT_6X6_100 = 9;
+  DICT_6X6_250 = 10;
+  DICT_6X6_1000 = 11;
+}
+
+message CreateArucoOptions {
+  // aruco dictionary
+  ArucoDictionary dictionary = 1;
+  // marker id in the dictionary 
+  int32 marker_id = 2 [(is.validate.rules).int32 = {gte: 0}];
+  // marker length in pixels
+  int32 marker_length = 3 [(is.validate.rules).int32 = {gt: 0}];
+  // number of bits in marker borders 
+  int32 border_bits = 4 [(is.validate.rules).int32 = {gt: 0}];
+}
+
+message CreateCharucoOptions {
+ // aruco dictionary
+  ArucoDictionary dictionary = 1;
+  // OpenCV legacy pattern
+  bool legacy_pattern = 2;
+  // marker length in pixels
+  float marker_length = 3 [(is.validate.rules).float = {gt: 0.0}];
+  // square length in pixels
+  float square_length = 4 [(is.validate.rules).float = {gt: 0.0}];
+  // number of squares in x
+  int32 n_squares_x = 5 [(is.validate.rules).int32 = {gt: 1}];
+  // number of squares in y
+  int32 n_squares_y = 6 [(is.validate.rules).int32 = {gt: 1}];
+  // number of bits in marker borders 
+  int32 border_bits = 7 [(is.validate.rules).int32 = {gt: 0}];
+}
+
+message CreateMarker {
+  oneof type {
+    CreateArucoOptions aruco = 1;
+    CreateCharucoOptions charuco = 2;
+  }
+}
+
+message IntrinsicCalibrationOptions {
+  // aruco dictionary
+  ArucoDictionary dictionary = 1;
+  // OpenCV legacy pattern
+  bool legacy_pattern = 2;
+  // marker length in meters
+  float marker_length = 3 [(is.validate.rules).float = {gt: 0.0}];
+  // square length in meters
+  float square_length = 4 [(is.validate.rules).float = {gt: 0.0}];
+  // number of squares in x
+  int32 n_squares_x = 5 [(is.validate.rules).int32 = {gt: 1}];
+  // number of squares in y
+  int32 n_squares_y = 6 [(is.validate.rules).int32 = {gt: 1}];
+  // number of images to be used in the intrinsic calibration
+  int32 samples = 7 [(is.validate.rules).int32 = {gt: 0}];
+}
+
+message ExtrinsicCalibrationOptions {
+  // aruco dictionary
+  ArucoDictionary dictionary = 1;
+  // marker id
+  int32 marker_id = 2 [(is.validate.rules).int32 = {gte: 0}];
+  // marker length in meters
+  float marker_length = 3 [(is.validate.rules).float = {gt: 0.0}];
+  // offset in the X direction in relation to the marker center.
+  float offset_x = 4;
+  // offset in the Y direction in relation to the marker center.
+  float offset_y = 5;
+}
+
+message CalibrationOptions {
+  // amqp broker uri
+  string uri = 1;
+  // topic where images are being published, only used if uri was set
+  string topic = 2;
+  // folder to save/load calibration data, if uri is not specified images will be read from this folder
+  string data_dir = 3;
+  // camera frame id
+  int64 camera_id = 4;
+  // world frame id
+  int64 world_id = 5;
+  // intrinsic calibration options
+  IntrinsicCalibrationOptions intrinsic = 6;
+  // extrinsic calibration options
+  ExtrinsicCalibrationOptions extrinsic = 7;
+  // save images used during calibration if true
+  bool save_images = 8;
+}
