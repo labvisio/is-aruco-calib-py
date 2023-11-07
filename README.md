@@ -82,6 +82,10 @@ When you launch the program, the following screen will appear. The ArUco Pose is
 
 The behavior of the script can be customized by passing a JSON configuration file as the first argument, e.g: `is-aruco-calib-intrinsic options.json` or `is-aruco-calib-extrinsic options.json`. The schema for this configuration file can be found in [is_aruco_calib/conf/options.proto]. Example of configuration files to calibrate using a charuco board can be found at [etc/conf/calibrate-charuco.json].
 
+## Troubleshooting
+
+* **Cannot detect charuco board**:  Charuco templates was updated in [opencv/opencv_contrib#3174](https://github.com/opencv/opencv_contrib/pull/3174). The behavior has changed only for templates with an even number of rows. This was done to make the ChArUco patterns compatible with the chessboard. The files [etc/conf/create-charuco.json] and [etc/conf/calibrate-charuco.json] have the option `legacy_pattern`. If you have an old board generated with old version of opencv, you need to set this option to `true`.
+
 <!-- Files -->
 [etc/conf/create-aruco.json]: etc/conf/create-aruco.json
 [etc/conf/create-charuco.json]: etc/conf/create-charuco.json
