@@ -63,7 +63,7 @@ is-aruco-calib-marker ./etc/conf/create-aruco.json
 The script **is-aruco-calib-intrinsic** computes the intrinsic and distortion parameters using a ChArUco marker and outputs the corresponding [CameraCalibration] object as a json file. Usage example, run the python script passing the desired configuration file:
 
 ```shell
-is-aruco-calib-intrinsic ./etc/conf/calibrate-aruco.json
+is-aruco-calib-intrinsic ./etc/conf/calibrate-charuco.json
 ```
 
 When you run the program, the following screen will appear. Please note that in the top corner of the image, you'll see the amount of images captured for calibration. The script automatically identifies when the CharUco board moves and only accepts detection if at least half of the corners are detected. So, when to number of detections reach the desired amount, the calibration is done and saved.
@@ -73,7 +73,7 @@ When you run the program, the following screen will appear. Please note that in 
 The script **is-aruco-calib-extrinsic** computes the extrinsic parameters, that is, the transformation that can change poses from the camera frame to the world frame and vice-versa. The world frame of reference will coincide with the one of the aruco marker. The transformation is added to the respective [CameraCalibration] json file. Usage example, run the python script passing the desired configuration file:
 
 ```shell
-is-aruco-calib-extrinsic ./etc/conf/calibrate-aruco.json
+is-aruco-calib-extrinsic ./etc/conf/calibrate-charuco.json
 ```
 
 When you launch the program, the following screen will appear. The ArUco Pose is calculated with respect to the marker center. The configuration file allows you to translate the point to a marker corner, making it easier to place it at a specific location in the world. Therefore, make sure to configure the parameters `options.extrinsic.offset_x` and `options.extrinsic.offset_y` correctly. To exit without saving, simply press the **q** key. To exit and save your changes, press the **k** key.
